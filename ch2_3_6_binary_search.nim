@@ -1,10 +1,10 @@
 import std/options
 
-func binarySearchInternal[T](haystack: openArray[T], needle: T, first, last: int): Option[int] =
+func binarySearchInternal[T](haystack: openArray[T], needle: proc (value: T): bool {.noSideEffect.}, first, last: int): Option[int] =
   if first > last:
     return none(int)
   if first == last:
-    if haystack[first] == needle:
+    if needle(haystack[first]):
       return some(first)
     else:
       return none(int)
@@ -16,5 +16,5 @@ func binarySearchInternal[T](haystack: openArray[T], needle: T, first, last: int
   else:
     right
 
-func binarySearch*[T](haystack: openArray[T], needle: T): Option[int] =
+func binarySearch*[T](haystack: openArray[T], needle: proc (value: T): bool {.noSideEffect.}): Option[int] =
   haystack.binarySearchInternal(needle, 0, haystack.len - 1)
